@@ -308,8 +308,19 @@ public:
 #define _TFT_DRV Arduino_RGB_Display
 #define _TFT_DRVF(a, b, c, d, e, f, g, h, i, j) Arduino_RGB_Display(e, f, a, 0, true)
 #elif AXS15231B_QSPI
-#define _TFT_DRV Arduino_AXS15231B
-#define _TFT_DRVF(a, b, c, d, e, f, g, h, i, j) Arduino_AXS15231B(a, b, c, d, e, f)
+class Ard_eSPI : public Arduino_Canvas {
+public:
+    Ard_eSPI(int16_t w, int16_t h, Arduino_GFX *gfx, int16_t ox, int16_t oy, int16_t rot)
+        : Arduino_Canvas(w, h, gfx, ox, oy, rot) {}
+
+    inline void drawChar2(int16_t x, int16_t y, char c, int16_t a, int16_t b) { drawChar(x, y, c, a, b); };
+    void drawString(String s, uint16_t x, uint16_t y);
+    void drawCentreString(String s, uint16_t x, uint16_t y, int f);
+    void drawRightString(String s, uint16_t x, uint16_t y, int f);
+    inline int getTextsize() { return textsize_x;  };
+    inline uint16_t getTextcolor() { return textcolor; };
+    inline uint16_t getTextbgcolor() { return textbgcolor; };
+};
 #elif DRIVER_RM67162
 #define _TFT_DRV Arduino_RM67162
 #define _TFT_DRVF(a, b, c, d, e, f, g, h, i, j) Arduino_RM67162(a, b, c, d)

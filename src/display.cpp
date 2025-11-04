@@ -60,6 +60,8 @@ Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel(
 );
 #elif defined(AXS15231B_QSPI) || defined(DRIVER_RM67162)
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(TFT_CS, TFT_SCLK, TFT_D0, TFT_D1, TFT_D2, TFT_D3);
+Arduino_GFX *g = new Arduino_AXS15231B(bus, GFX_NOT_DEFINED, 0, false, TFT_WIDTH, TFT_HEIGHT);
+Ard_eSPI *tft = new Ard_eSPI(TFT_WIDTH, TFT_HEIGHT, g, 0, 0, 0);
 #else // SPI Data Bus shared with SDCard and other SPIClass devices
 Arduino_DataBus *bus = new Arduino_HWSPI(TFT_DC, TFT_CS, TFT_SCLK, TFT_MOSI, TFT_MISO, &SPI);
 #endif
@@ -99,6 +101,7 @@ void displayScrollingText(const String &text, Opt_Coord &coord) {
         i++;
         if (i == 1) _lastmillis = millis() + 1000;
     }
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -110,6 +113,7 @@ void resetTftDisplay(int x, int y, uint16_t fc, int size, uint16_t bg, uint16_t 
     tft->fillScreen(screen);
     tft->setTextSize(size);
     tft->setTextColor(fc, bg);
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -122,6 +126,7 @@ void setTftDisplay(int x, int y, uint16_t fc, int size, uint16_t bg) {
     else if (x >= 0 && y >= 0) tft->setCursor(x, y);                // if x and y > 0, sets both
     tft->setTextSize(size);
     tft->setTextColor(fc, bg);
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -135,6 +140,7 @@ void TouchFooter(uint16_t color) {
     tft->drawCentreString("PREV", tftWidth / 6, tftHeight + 4, 1);
     tft->drawCentreString("SEL", tftWidth / 2, tftHeight + 4, 1);
     tft->drawCentreString("NEXT", 5 * tftWidth / 6, tftHeight + 4, 1);
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -148,6 +154,7 @@ void TouchFooter2(uint16_t color) {
     tft->drawCentreString("Skip", tftWidth / 6, tftHeight + 4, 1);
     tft->drawCentreString("LAUNCHER", tftWidth / 2, tftHeight + 4, 1);
     tft->drawCentreString("Skip", 5 * tftWidth / 6, tftHeight + 4, 1);
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -247,6 +254,7 @@ void initDisplay(bool doAll) {
 END:
     vTaskDelay(50 / portTICK_PERIOD_MS);
 #endif
+    tft->flush();
 }
 /***************************************************************************************
 ** Function name: initDisplayLoop
@@ -260,6 +268,7 @@ void initDisplayLoop() {
         initDisplay();
         vTaskDelay(pdTICKS_TO_MS(50));
     }
+    tft->flush();
     returnToMenu = true;
 }
 
@@ -328,6 +337,7 @@ void displayCurrentVersion(
     tft->display(false);
     tft->startCallback();
 #endif
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -366,6 +376,7 @@ void displayRedStripe(String text, uint16_t fgcolor, uint16_t bgcolor) {
     tft->setTextSize(_size);
     tft->setTextColor(_color, _bgcolor);
     tft->setCursor(_x, _y);
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -416,6 +427,7 @@ void progressHandler(size_t progress, size_t total) {
     }
 #endif
     wakeUpScreen();
+    tft->flush();
 }
 
 /***************************************************************************************
@@ -684,7 +696,7 @@ Opt_Coord drawOptions(
     tft->startCallback();
     vTaskDelay(pdTICKS_TO_MS(200));
 #endif
-
+    tft->flush();
     return coord;
 }
 /***************************************************************************************
@@ -789,6 +801,7 @@ void drawBatteryStatus(uint8_t bat) {
     tft->fillRoundRect(tftWidth - 40, 9, 30 * bat / 100, FP * LH + 5, 2, FGCOLOR);
     tft->drawLine(tftWidth - 30, 9, tftWidth - 30, 9 + FP * LH + 6, BGCOLOR);
     tft->drawLine(tftWidth - 20, 9, tftWidth - 20, 9 + FP * LH + 6, BGCOLOR);
+    tft->flush();
 }
 
 /*********************************************************************
@@ -919,6 +932,7 @@ int loopOptions(std::vector<Option> &options, bool bright, uint16_t al, uint16_t
 #if defined(HAS_TOUCH)
     TouchFooter(FGCOLOR);
 #endif
+    tft->flush();
     return index;
 }
 
@@ -1185,6 +1199,7 @@ void tftprintln(String txt, int margin, int numlines) {
         size -= nchars;
         numlines--;
     }
+    tft->flush();
 }
 /*********************************************************************
 **  Function: tftprintln
@@ -1208,6 +1223,7 @@ void tftprint(String txt, int margin, int numlines) {
         numlines--;
         prim = false;
     }
+    tft->flush();
 }
 
 /***************************************************************************************

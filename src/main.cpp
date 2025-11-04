@@ -258,7 +258,10 @@ void setup() {
         nvsHandle->commit();
     }
 #endif
+    delay(2000);  // USB再接続待ち
     Serial.begin(115200);
+    delay(500);
+    Serial.println("Serial started OK");
 
 // Setup GPIOs and stuff
 #if defined(HEADLESS)
@@ -289,7 +292,13 @@ void setup() {
 // Init Display
 #if !defined(HEADLESS)
     // tft->setAttribute(PSRAM_ENABLE,true);
+    //pinMode(1, OUTPUT);
+    //digitalWrite(1, HIGH);
     tft->begin();
+    //tft->fillScreen(RED);
+    //tft->flush();
+    //delay(1000);
+
 #ifdef TFT_INVERSION_ON
     tft->invertDisplay(true);
 #endif
