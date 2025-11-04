@@ -328,7 +328,6 @@ public:
 // CYD Default to not shoot errors on screen
 #define _TFT_DRV Arduino_ILI9341
 #define _TFT_DRVF(a, b, c, d, e, f, g, h, i, j) Arduino_ILI9341(a, b, c)
-#endif
 
 class Ard_eSPI : public _TFT_DRV {
 public:
@@ -349,5 +348,6 @@ public:
 
 private:
 };
+#endif
 #endif
 #endif //__TFT_H
