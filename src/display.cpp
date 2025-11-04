@@ -60,7 +60,7 @@ Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel(
 );
 #elif defined(AXS15231B_QSPI) || defined(DRIVER_RM67162)
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(TFT_CS, TFT_SCLK, TFT_D0, TFT_D1, TFT_D2, TFT_D3);
-Arduino_GFX *g = new Arduino_AXS15231B(bus, GFX_NOT_DEFINED, 0, false, TFT_WIDTH, TFT_HEIGHT, 0, 0, 0, 0, axs15231b_320480_init_operations, sizeof(axs15231b_320480_init_operations));
+Arduino_GFX *g = new Arduino_AXS15231B(bus, GFX_NOT_DEFINED, 0, false, TFT_WIDTH, TFT_HEIGHT);
 #define CANVAS
 Ard_eSPI *tft = new Ard_eSPI(TFT_WIDTH, TFT_HEIGHT, g, 0, 0, 0);
 #else // SPI Data Bus shared with SDCard and other SPIClass devices
