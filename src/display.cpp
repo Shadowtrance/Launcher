@@ -102,7 +102,7 @@ void displayScrollingText(const String &text, Opt_Coord &coord) {
         i++;
         if (i == 1) _lastmillis = millis() + 1000;
     }
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -114,7 +114,7 @@ void resetTftDisplay(int x, int y, uint16_t fc, int size, uint16_t bg, uint16_t 
     tft->fillScreen(screen);
     tft->setTextSize(size);
     tft->setTextColor(fc, bg);
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -127,7 +127,7 @@ void setTftDisplay(int x, int y, uint16_t fc, int size, uint16_t bg) {
     else if (x >= 0 && y >= 0) tft->setCursor(x, y);                // if x and y > 0, sets both
     tft->setTextSize(size);
     tft->setTextColor(fc, bg);
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -141,7 +141,7 @@ void TouchFooter(uint16_t color) {
     tft->drawCentreString("PREV", tftWidth / 6, tftHeight + 4, 1);
     tft->drawCentreString("SEL", tftWidth / 2, tftHeight + 4, 1);
     tft->drawCentreString("NEXT", 5 * tftWidth / 6, tftHeight + 4, 1);
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -155,7 +155,7 @@ void TouchFooter2(uint16_t color) {
     tft->drawCentreString("Skip", tftWidth / 6, tftHeight + 4, 1);
     tft->drawCentreString("LAUNCHER", tftWidth / 2, tftHeight + 4, 1);
     tft->drawCentreString("Skip", 5 * tftWidth / 6, tftHeight + 4, 1);
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -255,7 +255,7 @@ void initDisplay(bool doAll) {
 END:
     vTaskDelay(50 / portTICK_PERIOD_MS);
 #endif
-    tft->flush();
+    tft_flush();
 }
 /***************************************************************************************
 ** Function name: initDisplayLoop
@@ -269,7 +269,7 @@ void initDisplayLoop() {
         initDisplay();
         vTaskDelay(pdTICKS_TO_MS(50));
     }
-    tft->flush();
+    tft_flush();
     returnToMenu = true;
 }
 
@@ -338,7 +338,7 @@ void displayCurrentVersion(
     tft->display(false);
     tft->startCallback();
 #endif
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -377,7 +377,7 @@ void displayRedStripe(String text, uint16_t fgcolor, uint16_t bgcolor) {
     tft->setTextSize(_size);
     tft->setTextColor(_color, _bgcolor);
     tft->setCursor(_x, _y);
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -428,7 +428,7 @@ void progressHandler(size_t progress, size_t total) {
     }
 #endif
     wakeUpScreen();
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************
@@ -697,7 +697,7 @@ Opt_Coord drawOptions(
     tft->startCallback();
     vTaskDelay(pdTICKS_TO_MS(200));
 #endif
-    tft->flush();
+    tft_flush();
     return coord;
 }
 /***************************************************************************************
@@ -802,7 +802,7 @@ void drawBatteryStatus(uint8_t bat) {
     tft->fillRoundRect(tftWidth - 40, 9, 30 * bat / 100, FP * LH + 5, 2, FGCOLOR);
     tft->drawLine(tftWidth - 30, 9, tftWidth - 30, 9 + FP * LH + 6, BGCOLOR);
     tft->drawLine(tftWidth - 20, 9, tftWidth - 20, 9 + FP * LH + 6, BGCOLOR);
-    tft->flush();
+    tft_flush();
 }
 
 /*********************************************************************
@@ -933,7 +933,7 @@ int loopOptions(std::vector<Option> &options, bool bright, uint16_t al, uint16_t
 #if defined(HAS_TOUCH)
     TouchFooter(FGCOLOR);
 #endif
-    tft->flush();
+    tft_flush();
     return index;
 }
 
@@ -1200,7 +1200,7 @@ void tftprintln(String txt, int margin, int numlines) {
         size -= nchars;
         numlines--;
     }
-    tft->flush();
+    tft_flush();
 }
 /*********************************************************************
 **  Function: tftprintln
@@ -1224,7 +1224,7 @@ void tftprint(String txt, int margin, int numlines) {
         numlines--;
         prim = false;
     }
-    tft->flush();
+    tft_flush();
 }
 
 /***************************************************************************************

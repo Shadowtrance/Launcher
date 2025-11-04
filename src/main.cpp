@@ -258,7 +258,7 @@ void setup() {
         nvsHandle->commit();
     }
 #endif
-    delay(2000);  // USB再接続待ち
+    delay(2000);  // Waiting for USB reconnection
     Serial.begin(115200);
     delay(500);
     Serial.println("Serial started OK");
@@ -292,12 +292,7 @@ void setup() {
 // Init Display
 #if !defined(HEADLESS)
     // tft->setAttribute(PSRAM_ENABLE,true);
-    //pinMode(1, OUTPUT);
-    //digitalWrite(1, HIGH);
     tft->begin();
-    //tft->fillScreen(RED);
-    //tft->flush();
-    //delay(1000);
 
 #ifdef TFT_INVERSION_ON
     tft->invertDisplay(true);
@@ -507,7 +502,7 @@ void loop() {
             tft->display(false);
             vTaskDelay(pdTICKS_TO_MS(200));
 #endif
-            tft->flush();
+            tft_flush();
             if (first_loop) {
                 first_loop = false;
                 delay(350);

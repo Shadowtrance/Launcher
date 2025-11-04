@@ -498,7 +498,7 @@ String generalKeyboard(
             tft->startCallback();
             tft->display(false);
 #endif
-             tft->flush();
+             tft_flush();
         }
 
         // Cursor Handler

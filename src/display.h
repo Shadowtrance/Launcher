@@ -79,4 +79,10 @@ void tftprintln(String txt, int margin, int numlines = 0);
 
 void tftprint(String txt, int margin, int numlines = 0);
 
+void inline tft_flush() {
+  #ifdef CANVAS
+  tft->flush();
+  #endif
+}
+
 #endif
