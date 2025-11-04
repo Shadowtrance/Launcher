@@ -638,6 +638,7 @@ void startWebUi(String ssid, int encryptation, bool mode_ap) {
     setTftDisplay(7, tftHeight - 39, ALCOLOR, FP);
 
     tft->drawCentreString("press Sel to stop", tftWidth / 2, tftHeight - 15, 1);
+    tft_flush();
 
 #ifdef E_PAPER_DISPLAY
     tft->display(false);

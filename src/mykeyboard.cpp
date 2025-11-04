@@ -498,6 +498,7 @@ String generalKeyboard(
             tft->startCallback();
             tft->display(false);
 #endif
+             tft->flush();
         }
 
         // Cursor Handler
@@ -804,6 +805,7 @@ String generalKeyboard(
             }
 
             last_input_time = millis();
+            tft_flush();
         }
     }
 

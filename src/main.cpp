@@ -507,6 +507,7 @@ void loop() {
             tft->display(false);
             vTaskDelay(pdTICKS_TO_MS(200));
 #endif
+            tft->flush();
             if (first_loop) {
                 first_loop = false;
                 delay(350);

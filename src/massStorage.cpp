@@ -43,6 +43,7 @@ void MassStorage::beginUsb() {
     setupUsbEvent();
     drawUSBStickIcon(false);
     USB.begin();
+    tft->flush();
 }
 
 void MassStorage::setupUsbCallback() {
@@ -72,6 +73,7 @@ void MassStorage::setupUsbEvent() {
                 case ARDUINO_USB_RESUME_EVENT: MassStorage::displayMessage("USB resume"); break;
                 default: break;
             }
+            tft->flush();
         }
     });
 }
