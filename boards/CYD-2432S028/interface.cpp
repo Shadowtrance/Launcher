@@ -186,16 +186,21 @@ void _setBrightness(uint8_t brightval) {
 ** Handles the variables PrevPress, NextPress, SelPress, AnyKeyPress and EscPress
 **********************************************************************/
 void InputHandler(void) {
-    static long d_tmp = millis();
-    if (millis() - d_tmp > 250 || LongPress) { // I know R3CK.. I Should NOT nest if statements..
-        // but it is needed to not keep SPI bus used without need, it save resources
-        TouchPoint t;
+    static long lastTouchTime = 0;
+    static bool prevTouched = false;
+    const uint16_t debounceDelay = 250; // ms
+
 #ifdef DONT_USE_INPUT_TASK
         checkPowerSaveTime();
 #endif
-        if (touch.touched()) {
+
+        bool currentTouched = touch.touched();
+
+        // Detects only rising edge of touch (including debounce)
+        if (currentTouched && !prevTouched && (millis() - lastTouchTime > debounceDelay || LongPress)) {
+            lastTouchTime = millis();
             auto t = touch.getPointScaled();
-            d_tmp = millis();
+
 #ifdef DONT_USE_INPUT_TASK // need to reset the variables to avoid ghost click
             NextPress = false;
             PrevPress = false;
@@ -231,6 +236,7 @@ void InputHandler(void) {
             }
             Serial.printf("\nTouch Pressed on x=%d, y=%d, rot=%d\n", t.x, t.y, rotation);
             log_i("\nTouch Pressed on x=%d, y=%d, rot=%d\n", t.x, t.y, rotation);
+
 #if defined(CYD28_DISPLAY_VER_RES_MAX) && !defined(HAS_CAPACITIVE_TOUCH)
 #if CYD28_DISPLAY_VER_RES_MAX > 340
             auto t2 = touch.getPointRaw();
@@ -239,19 +245,26 @@ void InputHandler(void) {
 #endif
 
             if (!wakeUpScreen()) AnyKeyPress = true;
-            else return;
+            else {
+                prevTouched = currentTouched;
+                return;
+            }
 
             // Touch point global variable
             touchPoint.x = t.x;
             touchPoint.y = t.y;
             touchPoint.pressed = true;
             touchHeatMap(touchPoint);
-        }
     }
+
 #ifdef TOUCH_GT911_I2C
-    else
-        touch.touched(); // keep calling it to keep refreshing raw readings for when needed it will be ok
+    else {
+        // keep calling to refresh raw readings
+        touch.touched();
+    }
 #endif
+
+    prevTouched = currentTouched;
 }
 
 /*********************************************************************
